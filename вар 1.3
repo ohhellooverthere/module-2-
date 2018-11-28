@@ -1,0 +1,45 @@
+#include <iostream>
+#include <set>
+#include <vector>
+
+using namespace std;
+using vec = vector<int>;
+
+set<vec> Words(int n) {
+    if (n == 1) {
+        return {{0, 1}};
+    }
+
+    set<vec> words_last = Words(n-1);
+    set<vec> words_new{};
+    for (const auto& item : words_last) {
+        for (int i = 0; i < 2 * n - 1; ++i) {
+            for (int j = i; j < 2 * n - 1; ++j) {
+                vec word = item;
+                word.insert(begin(word) + j, 1);
+                word.insert(begin(word) + i, 0);
+                words_new.insert(word);
+            }
+        }
+    }
+    return words_new;
+}
+
+ostream& operator<< (ostream& os, const vec& v) {
+    cout << '{';
+    for (int i = 0; i < v.size() - 1; ++i) {
+        cout << v[i] << ", ";
+    }
+    cout << v[v.size() - 1] << "}";
+    return os;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    set<vec> s = Words(n);
+    for (const auto& item : s) {
+        cout << item << endl;
+    }
+    return 0;
+}
