@@ -1,0 +1,75 @@
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+class vector {
+public:
+    explicit vector(int n = 0) {
+        coefficients = new double[n + 1];
+        for(int i = 0; i < n + 1; ++i) {
+            coefficients[i] = 0;
+        }
+
+        length = n;
+    }
+
+    void Read() {
+        cin >> length;
+        coefficients = new double[length];
+        for (int i = 0; i < length; ++i) {
+            cin >> coefficients[i];
+        }
+    }
+
+    void Write() {
+        for (int i = 0; i < length; ++i) {
+            cout << coefficients[i] << " ";
+        }
+        cout << endl;
+    }
+
+    vector operator+(const vector& vec) {
+        vector vec_rez{};
+        vec_rez.length = length;
+        if (vec.length != length) {
+            throw runtime_error("Error, length should be equal");
+        }
+        for (int i = 0; i < length; ++i) {
+            vec_rez.coefficients[i] = vec.coefficients[i] + coefficients[i];
+        }
+        return vec_rez;
+    }
+
+    double operator*(const vector& vec) {
+        if (vec.length != length) {
+            throw runtime_error("Error, length should be equal");
+        }
+        double rez{};
+        for (int i = 0; i < length; ++i) {
+            rez += coefficients[i]*vec.coefficients[i];
+        }
+        return rez;
+    }
+
+    vector Norma() {
+        vector norma{};
+        norma.length = length;
+        double m{};
+        for (int i = 0; i < length; ++i) {
+            m += coefficients[i] / length;
+        }
+        for (int i = 0; i < length; ++i) {
+            norma.coefficients[i] = coefficients[i] / m;
+        }
+
+        return norma;
+    }
+
+
+private:
+    int length;
+    double* coefficients;
+};
