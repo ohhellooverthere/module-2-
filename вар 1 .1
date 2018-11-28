@@ -1,0 +1,68 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+bool PrintComment(ifstream& input, stringstream& ss, int begin) {
+    string s = ss.str();
+    while(s[begin] != '*') {
+        ++begin;
+    }
+    ++begin;
+
+    for (int i = begin; i < ss.str().size(); ++i) {
+        if (s[i] == '*' && s[i + 1] == '/') {
+            return true;
+        }
+        cout << s[i];
+    }
+    cout << endl;
+    while (true) {
+        string s{};
+        getline(input, s);
+
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] == '*' && s[i + 1] == '/') {
+                return true;
+            }
+            cout << s[i];
+        }
+        cout << endl;
+    }
+
+    return false;
+}
+
+int main() {
+    const string path_input  = "input.txt";
+    const string path_output = "output.txt";
+    ifstream input(path_input);
+    ofstream output(path_output); if (!input) cout << "error" << endl;
+    while(input) {
+        string s{};
+        getline(input, s);
+        stringstream ss{s}; 
+        for (int i = 0; i < s.size(); ++i) {
+            if (ss.peek() == '/') {
+                ss.ignore();
+                if (ss.peek() == '/') {
+                    break;
+                }
+                else  if (ss.peek() == '*') {
+                    PrintComment(input, ss, i);
+                    break;
+                }
+                else {
+                    output << '/';
+                }
+            }
+            output << (char)ss.peek();
+            ss.ignore();
+        }
+        output << endl;
+    }
+
+    return 0;
+}
