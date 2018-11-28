@@ -1,0 +1,61 @@
+//текстовий файл містить текст. записати його у інший файл, прибравши з нього зайві пробіли між словами та порожні рядки
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void deleteSymb(char *buf, int position)
+{
+	int j = position; //delete symbol
+	while (buf[j] != '\0')
+	{
+		buf[j] = buf[j + 1];
+		j++;
+	}
+}
+
+int main()
+{
+	FILE *fileIn;
+	FILE *fileOut;
+	const int BUFSIZE = 50;
+	char buf[BUFSIZE];
+
+	fileIn = fopen("input.txt", "r");
+	fileOut = fopen("output.txt", "w");
+
+	bool wasNextLine = false;
+	while (fgets(buf, sizeof(buf), fileIn))
+	{
+		int i = 0;
+		while (buf[i] != '\0')
+		{
+			if (wasNextLine && buf[i] == '\n')
+			{
+				deleteSymb(buf, i);
+				continue;
+			}
+			if (wasNextLine && buf[i] == ' ')
+			{
+				deleteSymb(buf, i);
+				continue;
+			}
+			if (buf[i] == ' ' && buf[i + 1] == ' ')
+			{
+				deleteSymb(buf, i);
+				continue;
+			}
+			if (buf[i] == '\n')
+			{
+				wasNextLine = true;
+				i++;
+				continue;
+			}
+			wasNextLine = false;
+			i++;
+		}
+		fprintf(fileOut, "%s", buf);
+	}
+
+	fclose(fileIn);
+	fclose(fileOut);
+	return 0;
+}
