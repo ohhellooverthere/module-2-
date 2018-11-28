@@ -1,0 +1,57 @@
+//структура, що описує вектор на площині. Операції:ввід,вивід,додавання,скалярний добуток,поворот,обчислення довжини
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+struct MyVector
+{
+	const int PI = 3.14159265358979323846264338327;
+	double x, y;
+	void read()
+	{
+		cout << "Введите 2 числа: координаты вектора" << endl;
+		cin >> x >> y;
+	}
+
+	void write()
+	{
+		cout << "Координаты вектора: " << x<<" "<<y << endl;
+	}
+
+	void addVector(MyVector vec)
+	{
+		x += vec.x;
+		y += vec.y;
+	}
+
+	double scalarMult(MyVector vec)
+	{
+		return x * vec.x + y*vec.y;
+	}
+
+	double length()
+	{
+		return sqrt(x*x + y * y);
+	}
+
+	void rotate(double angle)
+	{
+		double x1 = x * cos(angle/180*PI) - y * sin(angle / 180 * PI);
+		double y1 = y * cos(angle / 180 * PI) + x * sin(angle / 180 * PI);
+		x = x1;
+		y = y1;
+	}
+};
+
+void main()
+{
+	setlocale(LC_ALL,"rus");
+	MyVector vec;
+	vec.read();
+	vec.write();
+	vec.rotate(180);
+	vec.write();
+
+	system("pause");
+
+}
